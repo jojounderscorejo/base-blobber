@@ -46,10 +46,8 @@ Now, you can create a new Jupyter Notebook file in any directories of your prefe
 
 ![New Jupyter Notebook](images/Jupyter%203.png "New Jupyter Notebook")
 
-
 It should automatically redirect you to the newly created file, and to rename it, you need to click on the default name on the top left corner as shown in the following image.
 
 ![Change Jupyter Notebook File Name](images/Jupyter%204.png "Change File name")
-
 
 If you have gotten to here, you are now officially ready to use Blobber!

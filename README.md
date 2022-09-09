@@ -12,7 +12,7 @@ To install Blobber, simply run the following command line in the terminal:
 
 ``` python3 -m pip install blobber ```
 
-Alternatively, one can find the complete source code of Blobber at its Github Repository.
+Alternatively, one can find the complete source code of Blobber at its Github repository at <https://github.com/jojounderscorejo/base-blobber.git>
 
 ## Useage
 

@@ -32,7 +32,7 @@ Assuming now you are in your terminal that you opened a moment ago in Jupyter No
 
 Then, you can install Blobber one one simple command:
 
-    python -m pip install blobber</code>
+    python -m pip install blobber
 
 Now, assuming you have followed the above steps correctly, you should have now have Blobber installed and ready to go!
 

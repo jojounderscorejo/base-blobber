@@ -16,7 +16,7 @@ Alternatively, one can find the complete source code of Blobber at its Github re
 
 ## Useage
 
-Please refer to the [example provided](https://github.com/jojounderscorejo/base-blobber/tree/main/Example) for sample usage of Blobber.
+Please refer to the [example provided](https://github.com/jojounderscorejo/base-blobber/blob/main/Example/example.ipynb) for sample usage of Blobber.
 
 ## License
 

@@ -64,7 +64,7 @@ def detectBlobs(data, blob_threshold, global_params=DEAFULT_PARAMS):
     
     out = blob_log(data, min_sigma=dB_min_sigma, max_sigma=dB_max_sigma,\
                         threshold=blob_threshold, overlap=dB_overlap)
-    return np.int32(out[:,1]), np.int32(out[:,0]), out[:,2]    
+    return np.int32(out[:,1]), np.int32(out[:,0])    
 
 
 def extractEllipseROI(image, global_params=DEAFULT_PARAMS):
@@ -130,18 +130,18 @@ def showMaskedBlobs(raw_image, masks_stacks, ellipse_params,\
     images_stack = imageSplit(image)
     
     fig, axes = plt.subplots(2, 4, sharex=True, sharey=True,\
-                                    dpi=300, tight_layout=True)
+                                    dpi=150, tight_layout=True)
     for i in range(8):
         yc, xc, a, b    = np.int16(ellipse_params[i][:-1])
         frame           = normaliseImage(images_stack[i])
         threshold_val   = getPercentileValue(frame, param_ITP)
         frame           = thresholdingImage(frame, threshold_val)
         blob_threshold  = getPercentileValue(frame, param_BTP)
-        x, y, r         = detectBlobs(frame, blob_threshold, global_params)
+        x, y            = detectBlobs(frame, blob_threshold, global_params)
         blob_pos        = np.zeros(frame.shape)
         blob_pos[y, x]  = 1
         blob_masked     = blob_pos*masks_stacks[i]
-        in_y, in_x    = np.nonzero(blob_masked)
+        in_y, in_x      = np.nonzero(blob_masked)
         
         orientation     = ellipse_params[i][-1]
         cy, cx          = ellipse_perimeter(yc, xc, a, b, orientation)
@@ -164,3 +164,63 @@ def showMaskedBlobs(raw_image, masks_stacks, ellipse_params,\
             axes[1, j].axis('off')
             axes[1, j].text(0, 30, f'Frame {i}', color='white')
     plt.show()        
+
+
+def showBlobsWithFrame(raw_image, framing_image, global_params=DEAFULT_PARAMS):
+    param_ITP = global_params['image_thresholding_percentile']
+    param_BTP = global_params['blob_thresholding_percentile']
+    
+    image           = removeBoarder(raw_image, global_params)
+    images_stack    = imageSplit(image)
+    frame           = removeBoarder(framing_image, global_params)
+    frames_stack    = imageSplit(frame)
+    
+    fig, axes = plt.subplots(2, 4, sharex=True, sharey=True,\
+                                    dpi=150, tight_layout=True)
+    for i in range(8):
+        frame           = normaliseImage(images_stack[i])
+        threshold_val   = getPercentileValue(frame, param_ITP)
+        frame           = thresholdingImage(frame, threshold_val)
+        blob_threshold  = getPercentileValue(frame, param_BTP)
+        x, y            = detectBlobs(frame, blob_threshold, global_params)
+        blob_pos        = np.zeros(frame.shape)
+        blob_pos[y, x]  = 1
+        
+        if i <= 3:
+            axes[0, i].imshow(frames_stack[i], 'gray')
+            axes[0, i].imshow(images_stack[i], 'hot', alpha=0.6)
+            axes[0, i].plot(x, y, marker='o', markersize=7,\
+                            linestyle="None", fillstyle='none', color='green')
+            axes[0, i].axis('off')
+            axes[0, i].text(0, 30, f'Frame {i}', color='white')
+        elif 3 < i <=7:
+            j = i - 4
+            axes[1, j].imshow(frames_stack[i], 'gray')
+            axes[1, j].imshow(images_stack[i], 'hot', alpha=0.6)
+            axes[1, j].plot(x, y, marker='o', markersize=7,\
+                            linestyle="None", fillstyle='none', color='green')
+            axes[1, j].text(0, 30, f'Frame {i}', color='white')
+            axes[1, j].axis('off')
+    plt.show()
+    
+    
+def showPixelHistogram(raw_image, global_params=DEAFULT_PARAMS):
+    param_ITP = global_params['image_thresholding_percentile']
+    param_BTP = global_params['blob_thresholding_percentile']
+    
+    image        = removeBoarder(raw_image, global_params)
+    images_stack = imageSplit(image)
+    
+    fig, axes = plt.subplots(2, 4, sharex=True, sharey=True,\
+                                    dpi=150, tight_layout=True)
+    for i in range(8):
+        if i <= 3:
+            axes[0, i].hist(x=images_stack[i].flatten(), bins=64, log=True,\
+                                                            range=[0, 4095])
+            axes[0, i].set_title(f'Frame {i}')
+        elif 3 < i <=7:
+            j = i - 4
+            axes[1, j].hist(x=images_stack[i].flatten(), bins=64, log=True,\
+                                                            range=[0, 4095])
+            axes[1, j].set_title(f'Frame {i}')
+    plt.show()

@@ -2,7 +2,7 @@ from setuptools import setup
 from pathlib import Path
 
 
-VERSION = '0.9'
+VERSION = '1.0'
 DESCRIPTION = 'A cathode spot motion detection & analysis program'
 LONG_DESCRIPTION = Path("README.md").read_text() 
 
